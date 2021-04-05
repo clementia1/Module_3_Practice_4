@@ -1,7 +1,7 @@
 {
-  "LogsDir": "\/Logs",
+  "LogsDir": "Logs",
   "LogFileExtension": ".txt",
   "DateTimeFormat": "hh.mm.ss dd.MM.yyyy",
   "LogBackupFrequency": "10",
-  "BackupDir": "\/Backup"
+  "BackupDir": "Backup"
 }

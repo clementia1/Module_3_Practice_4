@@ -9,6 +9,6 @@ namespace Module_3_Practice_4.Services.Abstractions
 {
     public interface IConfigService
     {
-        LoggerConfig Read();
+        LoggerConfig GetConfig();
     }
 }

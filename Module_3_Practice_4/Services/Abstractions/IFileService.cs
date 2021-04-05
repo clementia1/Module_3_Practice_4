@@ -6,7 +6,10 @@ using System.Threading.Tasks;
 
 namespace Module_3_Practice_4.Services.Abstractions
 {
-    interface IFileService
+    public interface IFileService
     {
+        Task WriteLineAsync(string text);
+
+        void FileCopy(string sourceFile, string destinationFile);
     }
 }

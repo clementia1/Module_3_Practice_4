@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace Module_3_Practice_4.Services.Abstractions
 {
-    interface IBackupService
+    public interface IBackupService
     {
+        void CreateLogBackup(DateTime dateTime);
     }
 }

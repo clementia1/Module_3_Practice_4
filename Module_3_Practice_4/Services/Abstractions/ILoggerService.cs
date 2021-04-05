@@ -6,7 +6,10 @@ using System.Threading.Tasks;
 
 namespace Module_3_Practice_4.Services.Abstractions
 {
-    interface ILoggerService
+    public interface ILoggerService
     {
+        event Action<DateTime> CreateBackup;
+
+        Task Log(string message);
     }
 }

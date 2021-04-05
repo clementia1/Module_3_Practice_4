@@ -8,7 +8,7 @@ using Module_3_Practice_4.Services.Abstractions;
 
 namespace Module_3_Practice_4.Services
 {
-    public class FileService
+    public class FileService : IFileService
     {
         private readonly IDirectoryService _directoryService;
         private readonly IConfigService _configService;
@@ -21,17 +21,29 @@ namespace Module_3_Practice_4.Services
         {
             _directoryService = new DirectoryService();
             _configService = new ConfigService();
-            _config = _configService.Read();
+            _config = _configService.GetConfig();
 
             var datetimeFormatted = DateTime.UtcNow.ToString(_config.DateTimeFormat);
-            _filename = $@"{_config.LogsDir}\{datetimeFormatted}{_config.FileExtension}";
+            _filename = $@"{_config.LogsDir}\{datetimeFormatted}{_config.LogFileExtension}";
 
             _directoryService.CreateIfNotExists(_config.LogsDir);
         }
 
         public async Task WriteLineAsync(string text)
         {
-            await File.AppendAllTextAsync(_filename, text, Encoding.Default);
+            await sem.WaitAsync();
+
+            using (_streamWriter = new StreamWriter(_filename, true, Encoding.Default))
+            {
+                await _streamWriter.WriteLineAsync(text);
+            }
+
+            sem.Release();
+        }
+
+        public void FileCopy(string sourceFile, string destinationFile)
+        {
+            File.Copy(sourceFile, destinationFile);
         }
     }
 }

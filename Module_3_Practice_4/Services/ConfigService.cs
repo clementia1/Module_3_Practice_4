@@ -12,7 +12,7 @@ namespace Module_3_Practice_4.Services
 {
     public class ConfigService : IConfigService
     {
-        public LoggerConfig Read()
+        public LoggerConfig GetConfig()
         {
             var configFile = File.ReadAllText(Paths.ConfigPath);
             var config = JsonConvert.DeserializeObject<LoggerConfig>(configFile);
