@@ -17,7 +17,6 @@ namespace Module_3_Practice_4.Services
         private string _logFilepath;
         private int _backupFrequency;
         private int _logCount;
-        private static SemaphoreSlim sem = new SemaphoreSlim(1);
 
         public LoggerService()
         {
@@ -29,7 +28,7 @@ namespace Module_3_Practice_4.Services
             Init();
         }
 
-        public event Action<string, DateTime> CreateBackup;
+        public event Action<string> CreateBackup;
 
         public string LogFilepath => _logFilepath;
 
@@ -53,9 +52,7 @@ namespace Module_3_Practice_4.Services
         {
             if (_logCount % _backupFrequency == 0)
             {
-                var time = DateTime.UtcNow;
-                Console.WriteLine($"Time for backup: {time}");
-                CreateBackup?.Invoke(_logFilepath, time);
+                CreateBackup?.Invoke(_logFilepath);
             }
         }
 

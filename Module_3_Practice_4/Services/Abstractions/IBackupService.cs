@@ -8,6 +8,6 @@ namespace Module_3_Practice_4.Services.Abstractions
 {
     public interface IBackupService
     {
-        Task CreateLogBackup(string logFilepath, DateTime dateTime);
+        Task CreateLogBackup(string logFilepath);
     }
 }

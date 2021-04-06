@@ -25,9 +25,9 @@ namespace Module_3_Practice_4.Services
             CreateBackupDir();
         }
 
-        public async Task CreateLogBackup(string logFilepath, DateTime dateTime)
+        public async Task CreateLogBackup(string logFilepath)
         {
-            var datetimeFormatted = dateTime.ToString("HH.mm.ss.ff");
+            var datetimeFormatted = DateTime.UtcNow.ToString("HH.mm.ss.ff");
             var backupFilename = $@"{_config.BackupDir}\{datetimeFormatted}{_config.LogFileExtension}";
 
             await _fileService.FileCopy(logFilepath, backupFilename);

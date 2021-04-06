@@ -8,7 +8,7 @@ namespace Module_3_Practice_4.Services.Abstractions
 {
     public interface ILoggerService
     {
-        event Action<string, DateTime> CreateBackup;
+        event Action<string> CreateBackup;
 
         string LogFilepath { get; }
 
