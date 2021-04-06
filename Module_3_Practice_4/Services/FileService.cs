@@ -44,33 +44,30 @@ namespace Module_3_Practice_4.Services
         {
             await sem.WaitAsync();
 
+            // var tcs = new TaskCompletionSource<bool>();
             try
             {
-                var fileInfo = new FileInfo(sourceFile);
-                /*                using (FileStream stream = fileInfo.Open(FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
-                                {
-                                    using (var writer = new StreamWriter(destinationFile, append: false))
-                                    {
-                                        File.OpenRead
-                                        writer.Write(stream());
-                                    }
-                                    stream.Close();
-                                }*/
-
-                using (FileStream src = fileInfo.Open(FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+                File.Copy(sourceFile, destinationFile);
+                /*using (FileStream src = File.Open(sourceFile, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
                 {
                     using (var dest = File.OpenWrite(destinationFile))
                     {
                         src.CopyTo(dest);
+
+                        // tcs.SetResult(true);
                     }
-                }
+                }*/
             }
-            catch (IOException)
+            catch (IOException ex)
             {
-                Console.WriteLine("Cannot copy: file in use");
+                Console.WriteLine(ex);
+
+                // "Cannot copy: file in use"
             }
 
             sem.Release();
+
+            // return await tcs.Task;
         }
     }
 }

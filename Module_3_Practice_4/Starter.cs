@@ -16,7 +16,7 @@ namespace Module_3_Practice_4
         public void Run()
         {
             var logFilepath = _loggerService.LogFilepath;
-            _loggerService.CreateBackup += _backupService.CreateLogBackup;
+            _loggerService.CreateBackup += async (backupTarget, currentDatetime) => { await _backupService.CreateLogBackup(backupTarget, currentDatetime); };
 
             Task.Run(() => Function1());
             Task.Run(() => Function2());

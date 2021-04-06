@@ -41,12 +41,16 @@ namespace Module_3_Practice_4.Services
             {
                 await _fileService.WriteLineAsync(_logFilepath, logMessage);
                 _logCount++;
+                InvokeBackupEvent();
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
             }
+        }
 
+        private void InvokeBackupEvent()
+        {
             if (_logCount % _backupFrequency == 0)
             {
                 var time = DateTime.UtcNow;
