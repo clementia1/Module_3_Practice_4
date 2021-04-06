@@ -30,7 +30,7 @@ namespace Module_3_Practice_4
 
         private async void Function1()
         {
-            for (int i = 0; i < 60; i++)
+            for (int i = 0; i < 50; i++)
             {
                 await _loggerService.Log($"Emitted from {nameof(Function1)}");
             }
@@ -38,7 +38,7 @@ namespace Module_3_Practice_4
 
         private async void Function2()
         {
-            for (int i = 0; i < 60; i++)
+            for (int i = 0; i < 50; i++)
             {
                 await _loggerService.Log($"Emitted from {nameof(Function2)}");
             }
