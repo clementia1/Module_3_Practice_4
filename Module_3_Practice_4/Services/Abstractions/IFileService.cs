@@ -8,8 +8,8 @@ namespace Module_3_Practice_4.Services.Abstractions
 {
     public interface IFileService
     {
-        Task WriteLineAsync(string text);
+        Task WriteLineAsync(string filepath, string text);
 
-        void FileCopy(string sourceFile, string destinationFile);
+        Task FileCopy(string sourceFile, string destinationFile);
     }
 }

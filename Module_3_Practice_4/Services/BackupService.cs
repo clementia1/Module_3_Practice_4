@@ -25,13 +25,12 @@ namespace Module_3_Practice_4.Services
             CreateBackupDir();
         }
 
-        public void CreateLogBackup(DateTime dateTime)
+        public void CreateLogBackup(string logFilepath, DateTime dateTime)
         {
-            var datetimeFormatted = dateTime.ToString(_config.DateTimeFormat);
-            var logFilename = $@"{_config.LogsDir}\{datetimeFormatted}{_config.LogFileExtension}";
+            var datetimeFormatted = dateTime.ToString("HH:mm:ss:ff");
             var backupFilename = $@"{_config.BackupDir}\{datetimeFormatted}{_config.LogFileExtension}";
 
-            _fileService.FileCopy(logFilename, backupFilename);
+            _fileService.FileCopy(logFilepath, backupFilename);
         }
 
         public void CreateBackupDir()

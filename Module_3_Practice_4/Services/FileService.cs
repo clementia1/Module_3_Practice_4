@@ -13,7 +13,6 @@ namespace Module_3_Practice_4.Services
         private readonly IDirectoryService _directoryService;
         private readonly IConfigService _configService;
         private readonly LoggerConfig _config;
-        private readonly string _filename;
         private StreamWriter _streamWriter;
         private static SemaphoreSlim sem = new SemaphoreSlim(1);
 
@@ -23,27 +22,55 @@ namespace Module_3_Practice_4.Services
             _configService = new ConfigService();
             _config = _configService.GetConfig();
 
-            var datetimeFormatted = DateTime.UtcNow.ToString(_config.DateTimeFormat);
-            _filename = $@"{_config.LogsDir}\{datetimeFormatted}{_config.LogFileExtension}";
-
             _directoryService.CreateIfNotExists(_config.LogsDir);
         }
 
-        public async Task WriteLineAsync(string text)
+        public async Task WriteLineAsync(string filepath, string text)
         {
             await sem.WaitAsync();
 
-            using (_streamWriter = new StreamWriter(_filename, true, Encoding.Default))
+            using (FileStream stream = File.Open(filepath, FileMode.Append, FileAccess.Write, FileShare.Read))
             {
-                await _streamWriter.WriteLineAsync(text);
+                using (_streamWriter = new StreamWriter(stream, Encoding.Default))
+                {
+                    await _streamWriter.WriteLineAsync(text);
+                }
             }
 
             sem.Release();
         }
 
-        public void FileCopy(string sourceFile, string destinationFile)
+        public async Task FileCopy(string sourceFile, string destinationFile)
         {
-            File.Copy(sourceFile, destinationFile);
+            await sem.WaitAsync();
+
+            try
+            {
+                var fileInfo = new FileInfo(sourceFile);
+                /*                using (FileStream stream = fileInfo.Open(FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+                                {
+                                    using (var writer = new StreamWriter(destinationFile, append: false))
+                                    {
+                                        File.OpenRead
+                                        writer.Write(stream());
+                                    }
+                                    stream.Close();
+                                }*/
+
+                using (FileStream src = fileInfo.Open(FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+                {
+                    using (var dest = File.OpenWrite(destinationFile))
+                    {
+                        src.CopyTo(dest);
+                    }
+                }
+            }
+            catch (IOException)
+            {
+                Console.WriteLine("Cannot copy: file in use");
+            }
+
+            sem.Release();
         }
     }
 }

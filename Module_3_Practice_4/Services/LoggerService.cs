@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Module_3_Practice_4.Models;
 using Module_3_Practice_4.Services.Abstractions;
@@ -12,19 +13,25 @@ namespace Module_3_Practice_4.Services
     {
         private IFileService _fileService;
         private IConfigService _configService;
-        private LoggerConfig _loggerConfig;
+        private LoggerConfig _config;
+        private string _logFilepath;
         private int _backupFrequency;
         private int _logCount;
+        private static SemaphoreSlim sem = new SemaphoreSlim(1);
 
         public LoggerService()
         {
             _fileService = new FileService();
             _configService = new ConfigService();
-            _loggerConfig = _configService.GetConfig();
-            _backupFrequency = int.Parse(_loggerConfig.LogBackupFrequency);
+            _config = _configService.GetConfig();
+            _backupFrequency = int.Parse(_config.LogBackupFrequency);
+
+            Init();
         }
 
-        public event Action<DateTime> CreateBackup;
+        public event Action<string, DateTime> CreateBackup;
+
+        public string LogFilepath => _logFilepath;
 
         public async Task Log(string message)
         {
@@ -32,20 +39,26 @@ namespace Module_3_Practice_4.Services
 
             try
             {
-                await _fileService.WriteLineAsync(logMessage);
+                await _fileService.WriteLineAsync(_logFilepath, logMessage);
                 _logCount++;
-
-                if (_logCount % _backupFrequency == 0)
-                {
-                    var time = DateTime.UtcNow;
-                    Console.WriteLine(time);
-                    CreateBackup?.Invoke(time);
-                }
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
             }
+
+            if (_logCount % _backupFrequency == 0)
+            {
+                var time = DateTime.UtcNow;
+                Console.WriteLine($"Time for backup: {time}");
+                CreateBackup?.Invoke(_logFilepath, time);
+            }
+        }
+
+        private void Init()
+        {
+            var datetimeFormatted = DateTime.UtcNow.ToString(_config.DateTimeFormat);
+            _logFilepath = $@"{_config.LogsDir}\{datetimeFormatted}{_config.LogFileExtension}";
         }
     }
 }
