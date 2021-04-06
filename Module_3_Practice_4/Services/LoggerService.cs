@@ -40,7 +40,7 @@ namespace Module_3_Practice_4.Services
             {
                 await _fileService.WriteLineAsync(_logFilepath, logMessage);
                 _logCount++;
-                InvokeBackupEvent();
+                InvokeBackupEventOnCount(_backupFrequency);
             }
             catch (Exception ex)
             {
@@ -48,9 +48,9 @@ namespace Module_3_Practice_4.Services
             }
         }
 
-        private void InvokeBackupEvent()
+        private void InvokeBackupEventOnCount(int count)
         {
-            if (_logCount % _backupFrequency == 0)
+            if (_logCount % count == 0)
             {
                 CreateBackup?.Invoke(_logFilepath);
             }
