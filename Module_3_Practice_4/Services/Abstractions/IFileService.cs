@@ -10,6 +10,6 @@ namespace Module_3_Practice_4.Services.Abstractions
     {
         Task WriteLineAsync(string filepath, string text);
 
-        Task FileCopy(string sourceFile, string destinationFile);
+        Task AtomicFileCopy(string sourceFile, string destinationFile);
     }
 }

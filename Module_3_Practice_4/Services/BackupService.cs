@@ -30,7 +30,7 @@ namespace Module_3_Practice_4.Services
             var datetimeFormatted = DateTime.UtcNow.ToString("HH.mm.ss.ff");
             var backupFilename = $@"{_config.BackupDir}\{datetimeFormatted}{_config.LogFileExtension}";
 
-            await _fileService.FileCopy(logFilepath, backupFilename);
+            await _fileService.AtomicFileCopy(logFilepath, backupFilename);
         }
 
         public void CreateBackupDir()

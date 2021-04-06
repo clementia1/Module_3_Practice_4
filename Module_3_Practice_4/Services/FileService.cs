@@ -39,7 +39,7 @@ namespace Module_3_Practice_4.Services
             sem.Release();
         }
 
-        public async Task FileCopy(string sourceFile, string destinationFile)
+        public async Task AtomicFileCopy(string sourceFile, string destinationFile)
         {
             await sem.WaitAsync();
 
