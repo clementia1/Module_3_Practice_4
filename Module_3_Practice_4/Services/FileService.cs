@@ -44,30 +44,16 @@ namespace Module_3_Practice_4.Services
         {
             await sem.WaitAsync();
 
-            // var tcs = new TaskCompletionSource<bool>();
             try
             {
                 File.Copy(sourceFile, destinationFile);
-                /*using (FileStream src = File.Open(sourceFile, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
-                {
-                    using (var dest = File.OpenWrite(destinationFile))
-                    {
-                        src.CopyTo(dest);
-
-                        // tcs.SetResult(true);
-                    }
-                }*/
             }
             catch (IOException ex)
             {
                 Console.WriteLine(ex);
-
-                // "Cannot copy: file in use"
             }
 
             sem.Release();
-
-            // return await tcs.Task;
         }
     }
 }

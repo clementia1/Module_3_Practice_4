@@ -35,7 +35,7 @@ namespace Module_3_Practice_4.Services
 
         public async Task Log(string message)
         {
-            var logMessage = $"{DateTime.UtcNow}: {message}";
+            var logMessage = $"{DateTime.UtcNow} {message}";
 
             try
             {
