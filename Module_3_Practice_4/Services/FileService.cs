@@ -13,7 +13,6 @@ namespace Module_3_Practice_4.Services
         private readonly IDirectoryService _directoryService;
         private readonly IConfigService _configService;
         private readonly LoggerConfig _config;
-        private StreamWriter _streamWriter;
         private static SemaphoreSlim sem = new SemaphoreSlim(1);
 
         public FileService()
@@ -31,9 +30,9 @@ namespace Module_3_Practice_4.Services
 
             using (FileStream stream = File.Open(filepath, FileMode.Append, FileAccess.Write, FileShare.Read))
             {
-                using (_streamWriter = new StreamWriter(stream, Encoding.Default))
+                using (StreamWriter streamWriter = new StreamWriter(stream, Encoding.Default))
                 {
-                    await _streamWriter.WriteLineAsync(text);
+                    await streamWriter.WriteLineAsync(text);
                 }
             }
 
